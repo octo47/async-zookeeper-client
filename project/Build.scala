@@ -8,19 +8,23 @@ object AsyncZkClient extends Build {
   val VERSION = "0.2.3"
 
   val dependencies =
-    "com.typesafe.akka"    %  "akka-actor" % "2.0.4" ::
+    "com.typesafe.akka"    %% "akka-actor" % "2.2.0" ::
     "org.apache.zookeeper" %  "zookeeper"  % "3.4.3" ::
-    "org.scalatest"        %% "scalatest"  % "1.8" % "test" :: 
-    "com.github.bigtoast"  %% "rokprox"    % "0.2.0" % "test" :: Nil
+    "org.scalatest"        %% "scalatest"  % "1.9.1" % "test" ::
+    "com.github.bigtoast"  %% "rokprox"    % "0.2.2" % "test" :: Nil
 
   val publishDocs = TaskKey[Unit]("publish-docs")
 
-  val project = Project("async-zk-client",file("."),
+  val project = Project(
+    id = "async-zk-client",
+    base = file("."),
     settings = Defaults.defaultSettings ++ Seq(
       organization := "com.github.bigtoast",
       name         := "async-zk-client",
       version      := VERSION,
-      scalaVersion := "2.9.2",
+      scalaVersion := "2.10.2",
+
+      resolvers ++= Seq("octo47 repo" at "http://octo47.github.io/repo/"),
 
       ivyXML :=
         <dependencies>
@@ -30,10 +34,10 @@ object AsyncZkClient extends Build {
           <exclude org="thrift" module="libthrift" />
         </dependencies>,
 
-      publishTo := Some(Resolver.file("bigtoast.github.com", file(Path.userHome + "/Projects/BigToast/bigtoast.github.com/repo"))),
+      publishTo := Some(Resolver.file("octo47.github.com", file(Path.userHome + "/Projects/github/octo47.github.com/repo"))),
 
       publishDocs <<= ( doc in Compile , target in Compile in doc, version ) map { ( docs, dir, v ) =>
-        val newDir = Path.userHome / "/Projects/BigToast/bigtoast.github.com/docs/async-zk-client" / v
+        val newDir = Path.userHome / "/Projects/github/octo47.github.com/docs/async-zk-client" / v
         IO.delete( newDir )
         IO.createDirectory( newDir )
         IO.copyDirectory( dir, newDir )
