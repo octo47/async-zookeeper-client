@@ -24,7 +24,11 @@ object AsyncZkClient extends Build {
       version      := VERSION,
       scalaVersion := "2.10.2",
 
-      resolvers ++= Seq("octo47 repo" at "http://octo47.github.io/repo/"),
+      resolvers ++= Seq(
+        "octo47 repo" at "http://octo47.github.io/repo/",
+        "bigtoast repo" at "http://bigtoast.github.io/repo/",
+        "ticketfly repo" at "http://ticketfly.github.io/repo/"
+      ),
 
       ivyXML :=
         <dependencies>
@@ -34,6 +38,7 @@ object AsyncZkClient extends Build {
           <exclude org="thrift" module="libthrift" />
         </dependencies>,
 
+      publishMavenStyle := false,
       publishTo := Some(Resolver.file("octo47.github.com", file(Path.userHome + "/Projects/github/octo47.github.com/repo"))),
 
       publishDocs <<= ( doc in Compile , target in Compile in doc, version ) map { ( docs, dir, v ) =>
